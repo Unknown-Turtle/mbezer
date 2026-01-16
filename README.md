@@ -2,12 +2,6 @@
 An application for the visualisation of embeddings into 3-d space for debugging and insights. It uses combines a **React** frontend with a **FastAPI** backend and uses a custom **C++** extension for accelerated vector search operations.
 
 
-* **Interactive 3D Visualization**: Built with Plotly.js and React.
-* **Algorithm Support**: Switch between PCA, t-SNE, and UMAP on the fly.
-* **Hybrid Architecture**: Python for data handling, C++ (via PyBind11) for computationally intensive neighbor search.
-* **Auto-Clustering**: Automatically detects groups in unlabeled data using K-Means.
-
-
 ## How to use
 
 Open two terminal windows to run the frontend and backend simultaneously.
@@ -26,14 +20,6 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 # 2. Install dependencies
 pip install requirements.txt
 
-# 3. Compile the C++ Accelerator
-# This builds the 'mbezer_cpp' module for high-performance math
-cd app
-python setup.py build_ext --inplace
-cd ..
-
-# 4. Start the Server
-uvicorn app.main:app --reload
 # 3. Compile the C++ Accelerator
 # This builds the 'mbezer_cpp' module for high-performance math
 cd app
