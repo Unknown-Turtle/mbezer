@@ -1,7 +1,7 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Query
 from fastapi.middleware.cors import CORSMiddleware
-import pandas as pd
-import io
+
+from app.processing import process_data
 
 app = FastAPI()
 
@@ -16,20 +16,19 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"message": "EmbeddingLab API is running"}
+    return {"message": "mbezer API is running"}
 
 @app.post("/upload")
-async def upload_csv(file: UploadFile = File(...)):
-    
-    contents = await file.read()
-    df = pd.read_csv(io.StringIO(contents.decode('utf-8')))
-    
-    
-    return {
-        "filename": file.filename,
-        "rows": df.shape[0],
-        "columns": df.shape[1],
-        "message": "File received. Ready for dimensionality reduction."
-    }
+async def upload_csv(
+    file: UploadFile = File(...), 
+    method: str = Query("pca") # Explicitly define as Query parameter
+):
+    try:
+        contents = await file.read()
+        result = process_data(contents, file.filename, method)
+        return result
+    except Exception as e:
+        print(f"Error during processing: {e}")
+        return {"error": str(e)}
 
-# To run: uvicorn app.main:app --reload
+# unicorn app.main:app --reload
